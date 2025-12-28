@@ -1,12 +1,11 @@
 /*
-Copyright © 2025 NAME HERE <EMAIL ADDRESS>
+Copyright © 2025 Bartholomaeuss
 */
 package cmd
 
 import (
+	"dockvol/core/backup"
 	"fmt"
-	"os/exec"
-	"strings"
 
 	"github.com/spf13/cobra"
 )
@@ -28,26 +27,9 @@ to quickly create a Cobra application.`,
 	RunE: func(cmd *cobra.Command, args []string) error {
 		fmt.Println("backup called")
 
-		dockerCmd := exec.Command("docker", "ps", "-aq", "--filter", "volume="+volumeName)
-		fmt.Print(dockerCmd)
-		fmt.Print("\n")
-
-		stdout, err := dockerCmd.Output()
-		if err != nil {
-			return fmt.Errorf("docker ps failed: %w", err)
+		if err := backup.Backup(volumeName); err != nil {
+			return err
 		}
-
-		fmt.Print("\n")
-		fmt.Print(stdout)
-		fmt.Print("\n")
-		lines := strings.Split(strings.TrimSpace(string(stdout)), "\n")
-		fmt.Print(lines)
-		countContainers := len(lines)
-		if countContainers > 1 {
-			return fmt.Errorf("Architectural violation! volume wird vermutlich von mehreren containern verwendet!")
-		}
-		fmt.Print("\n")
-		fmt.Print(countContainers)
 		return nil
 	},
 }

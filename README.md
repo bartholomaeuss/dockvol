@@ -39,6 +39,36 @@ go build -o dockvol .
 
 ---
 
+### Versioning and Release Tags
+
+This project uses a single semantic versioning scheme for both stable and canary builds so CI can decide which pipeline to run.
+
+**Tag format**
+
+- Stable: `vMAJOR.MINOR.PATCH`
+- Prerelease (canary): `vMAJOR.MINOR.PATCH-canary.N`
+- Only the `-canary.N` prerelease suffix is supported. Any other suffix is treated as invalid.
+
+**When to bump**
+
+- MAJOR: breaking CLI changes or incompatible behavior changes (renamed flags, removed outputs, changed defaults).
+- MINOR: new backward-compatible features or flags.
+- PATCH: bug fixes, docs-only changes, or internal refactors that do not change public CLI behavior.
+- `canary.N`: increment `N` for each canary cut of the same base version.
+
+**CI behavior**
+
+- If the tag matches `-canary.` (for example, `v1.4.0-canary.3`), run the prerelease pipeline.
+- If the tag has no prerelease suffix (for example, `v1.4.0`), run the stable pipeline.
+- If the build is not running from an annotated tag that matches the format above, treat it as a dev build.
+
+**Version in the binary**
+
+- CI should pass the git tag into the build (for example via `-ldflags "-X dockvol/cmd.Version=$TAG"`).
+- The CLI should expose this version string (for example `dockvol --version`) so the reported version equals the tag that triggered the build.
+
+---
+
 ### Command Reference
 
 | Command | Description | Flags |

@@ -1,6 +1,6 @@
 {
   "name": "Go CLI Dev",
-  "image": "golang:1.22",
+  "image": "golang:1.25-bookworm",
   "features": {
     "ghcr.io/devcontainers/features/docker-in-docker:2": {},
     "ghcr.io/devcontainers/features/git:1": {}
@@ -9,5 +9,14 @@
     "LANG": "C.UTF-8",
     "LC_ALL": "C.UTF-8"
   },
-  "postCreateCommand": "apt-get -y update && apt-get install -y curl && curl -LsSf https://astral.sh/uv/install.sh | sh && ~/.local/bin/uv tool install pre-commit && go install github.com/spf13/cobra-cli@latest && go install github.com/go-delve/delve/cmd/dlv@latest"
+  "postCreateCommand": "apt-get -y update && apt-get install -y cifs-utils curl && curl -LsSf https://astral.sh/uv/install.sh | sh && ~/.local/bin/uv tool install pre-commit && go install github.com/spf13/cobra-cli@latest && go install github.com/go-delve/delve/cmd/dlv@latest",
+  "customizations": {
+    "vscode": {
+      "extensions": [
+        "ms-azuretools.vscode-containers",
+        "openai.chatgpt",
+        "golang.go"
+      ]
+    }
+  }
 }
